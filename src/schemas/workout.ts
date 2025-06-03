@@ -5,7 +5,7 @@ export const workoutSchema = z.object({
     title: z.string().max(100),
     description: z.string().max(150),
     why: z.string().max(200),
-    mentalFuel: z.string().max(120),
+    mentalFuel: z.string().max(140),
   }),
   workoutPlan: z.object({
     workoutId: z.string().min(1).max(100),
