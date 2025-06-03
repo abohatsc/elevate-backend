@@ -1,4 +1,6 @@
 import { VercelRequest, VercelResponse } from '@vercel/node'
+import { withApiKey } from '../utils/auth'
+
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
   res.status(200).json({
