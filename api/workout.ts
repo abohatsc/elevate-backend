@@ -47,7 +47,17 @@ Your response must follow this structure:
   }
 }
 
-Keep the tone friendly and inspiring. Only respond with the JSON.
+Keep the tone friendly and inspiring.
+== Constraints ==
+- description: Include actual HR zone or pace min/km.
+- why: Explain why this workout fits *today*, using training load and health metrics. Do not list numbers—interpret them.
+- mentalFuel: Provide a motivational, emotionally resonant message.
+
+== Notes ==
+- Use only the 13 allowed workout types.
+- Segment design must be compatible with Apple Workout API (type, duration, HR or pace, label, phase).
+- Consider streaks, deload state, and recent Z3/Z4 efforts.
+- Use smart zone recommendations personalized to user profile.
 `;
 
     const completion = await openai.chat.completions.create({
