@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "WorkoutSchema",
+  "type": "object",
+  "properties": {
+    "workoutInformation": {
+      "type": "object",
+      "description": "User-facing information about the workout",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Title of the workout",
+          "maxLength": 100
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the workout",
+          "maxLength": 150
+        },
+        "why": {
+          "type": "string",
+          "description": "Explanation of why this workout is beneficial",
+          "maxLength": 200
+        },
+        "mentalFuel": {
+          "type": "string",
+          "description": "Motivational text for the workout",
+          "maxLength": 120
+        }
+      },
+      "required": ["title", "description", "why", "mentalFuel"],
+      "additionalProperties": false
+    },
+    "workoutPlan": {
+      "type": "object",
+      "description": "Technical workout plan data",
+      "properties": {
+        "workoutId": {
+          "type": "string",
+          "description": "Unique identifier for the workout plan",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "segments": {
+          "type": "array",
+          "description": "Array of workout segments that make up the complete workout",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "description": "Type of workout segment",
+                "enum": ["warmup", "workout", "cooldown", "recovery", "interval", "rest"]
+              },
+              "duration": {
+                "type": "number",
+                "description": "Duration of the segment in seconds",
+                "minimum": 0
+              },
+              "distance": {
+                "type": "number",
+                "description": "Distance of the segment in kilometers",
+                "minimum": 0
+              },
+              "pace": {
+                "type": "string",
+                "description": "Target pace for the segment (e.g., '4:30' or 'Z3')",
+                "pattern": "^(\\d{1,2}:\\d{2}|Z[1-5])$"
+              },
+              "heartRate": {
+                "type": "string",
+                "description": "Target heart rate range (e.g., '120-130')",
+                "pattern": "^\\d{2,3}-\\d{2,3}$"
+              },
+              "repeat": {
+                "type": "number",
+                "description": "Number of times this segment should be repeated",
+                "minimum": 1
+              },
+              "label": {
+                "type": "string",
+                "description": "Custom label for the segment"
+              },
+              "phase": {
+                "type": "string",
+                "description": "Phase of the workout this segment belongs to"
+              }
+            },
+            "required": ["type"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["segments", "workoutId"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["workoutInformation", "workoutPlan"],
+  "additionalProperties": false
+}
