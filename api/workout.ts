@@ -70,14 +70,16 @@ Keep the tone friendly and inspiring.
     });
 
     const raw = completion.choices[0]?.message?.content || '';
+    const cleaned = raw.replace(/```json|```/g, '').trim();
+  
 
     if (process.env.NODE_ENV !== 'production') {
       console.log('🔍 GPT Request Input:', input);
       console.log('🧠 GPT Prompt:', systemPrompt);
-      console.log('📝 GPT Raw Output:', raw);
+      console.log('📝 GPT Raw Output:', cleaned);
     }
 
-    const parsed = JSON.parse(raw);
+    const parsed = JSON.parse(cleaned);
     const validated = workoutSchema.safeParse(parsed);
 
     if (!validated.success) {
