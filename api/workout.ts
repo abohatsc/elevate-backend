@@ -33,8 +33,8 @@ ${JSON.stringify(jsonSchema, null, 2)}
 
 == Constraints ==
 - description: Max 150 characters. Include specific HR zone(s) or pace (min/km) and workout duration.
-- why: Max 200 characters. Explain why this workout is appropriate *today*, interpreting fitness and recovery data (do not list numbers).
-- mentalFuel: Max 120 characters. Use emotion and motivation to fuel the runner’s mindset today.
+- why: Max 250 characters. Explain why this workout is appropriate *today*, interpreting fitness and recovery data (do not list numbers).
+- mentalFuel: Max 200 characters. Use emotion and motivation to fuel the runner’s mindset today.
 - heartRate: Format as "120-135" (digits and hyphen only, no units or symbols).
 - pace must be either:
   • format "Z1" to "Z5" (for HR zone) or
