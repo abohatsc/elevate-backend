@@ -1,6 +1,7 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import OpenAI from 'openai';
 import { workoutSchema } from '../src/schemas/workout';
+import { zodToJsonSchema } from 'zod-to-json-schema';
 import { withApiKey } from '../utils/auth';
 // import { TrainingDayInputDTO } from '../src/types/training'; // Uncomment when available
 
@@ -9,6 +10,7 @@ const openai = new OpenAI({
 });
 
 const model = process.env.GPT_MODEL || 'gpt-3.5-turbo';
+const jsonSchema = zodToJsonSchema(workoutSchema, "WorkoutSchema");
 
 export default withApiKey(async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
@@ -20,44 +22,25 @@ export default withApiKey(async function handler(req: VercelRequest, res: Vercel
     const input = req.body;
 
     const systemPrompt = `
-You are a professional running coach. Based on the user's training context, return a structured daily running workout.
+  You are an elite running coach designing daily personalized workouts for the Elevate app.
+  Your task is to suggest a workout based on the runner's fitness and recovery metrics. Keep the tone grounded, clear, and motivating.
 
-Your response must follow this structure:
-{
-  workoutInformation: {
-    title: string (max 100),
-    description: string (max 150),
-    why: string (max 200),
-    mentalFuel: string (max 120)
-  },
-  workoutPlan: {
-    workoutId: string,
-    segments: [
-      {
-        type: one of "warmup" | "workout" | "cooldown" | "recovery" | "interval" | "rest",
-        duration?: number (seconds),
-        distance?: number (kilometers),
-        pace?: string ("Z2" or "4:30"),
-        heartRate?: string ("120-140"),
-        repeat?: number,
-        label?: string,
-        phase?: string
-      }
-    ]
-  }
-}
+  ${JSON.stringify(jsonSchema, null, 2)}
 
-Keep the tone friendly and inspiring.
-== Constraints ==
-- description: Include actual HR zone or pace min/km.
-- why: Explain why this workout fits *today*, using training load and health metrics. Do not list numbers—interpret them.
-- mentalFuel: Provide a motivational, emotionally resonant message.
+  Keep the tone friendly and inspiring.
+  
+  == Constraints ==
+  - description: Include actual HR zone or pace min/km.
+  - why: Explain why this workout fits *today*, using training load and health metrics. Do not list numbers—interpret them.
+  - mentalFuel: Provide a motivational, emotionally resonant message.
 
-== Notes ==
-- Use only the 13 allowed workout types.
-- Segment design must be compatible with Apple Workout API (type, duration, HR or pace, label, phase).
-- Consider streaks, deload state, and recent Z3/Z4 efforts.
-- Use smart zone recommendations personalized to user profile.
+  == Notes ==
+  - Use only the 13 allowed workout types.
+  - Segment design must be compatible with Apple Workout API (type, duration, HR or pace, label, phase).
+  - Consider streaks, deload state, and recent Z3/Z4 efforts.
+  - Use smart zone recommendations personalized to user profile.
+
+  Respond with the final JSON object only.
 `;
 
     const completion = await openai.chat.completions.create({
