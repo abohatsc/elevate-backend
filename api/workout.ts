@@ -30,9 +30,10 @@ export default withApiKey(async function handler(req: VercelRequest, res: Vercel
   Keep the tone friendly and inspiring.
   
   == Constraints ==
-  - description: Include actual HR zone or pace min/km and workout duration in h:mm.
-  - why: Explain why this workout fits *today*, using training load and health metrics. Do not list numbers—interpret them.
-  - mentalFuel: Provide a motivational, emotionally resonant message.
+  - description: Max 150 characters. Include actual HR zone or pace min/km and workout duration in h:mm.
+  - why: Max 200 characters. Explain why this workout fits *today*, using training load and health metrics. Do not list numbers—interpret them.
+  - mentalFuel: Max 120 characters. Provide a motivational, emotionally resonant message.
+  - heartRate: Format must be a range like "120-135" using digits and a hyphen only (no en dash or other characters).
 
   == Notes ==
   - Use only the 13 allowed workout types.
