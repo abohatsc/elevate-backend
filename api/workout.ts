@@ -36,10 +36,10 @@ ${JSON.stringify(jsonSchema, null, 2)}
 - why: Max 250 characters. Explain why this workout is appropriate *today*, interpreting fitness and recovery data (do not list numbers).
 - mentalFuel: Max 200 characters. Use emotion and motivation to fuel the runner’s mindset today.
 - heartRate: Format as "120-135" (digits and hyphen only, no units or symbols).
-- pace must be either:
-  • format "Z1" to "Z5" (for HR zone) or
-  • format "mm:ss" (e.g. "4:30", "10:45")
-  Any other format is invalid.
+- pace must be one of the following formats:
+  • HR zone: "Z1", "Z2", ..., "Z5"
+  • Pace time: "mm:ss" (e.g., "4:30", "10:00")
+  Any other format (e.g. "Z2+", "moderate", "fast") is invalid.
 
 == Notes ==
 - Choose from the 13 predefined workout types only.
