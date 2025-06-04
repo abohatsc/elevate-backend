@@ -30,7 +30,7 @@ export default withApiKey(async function handler(req: VercelRequest, res: Vercel
   Keep the tone friendly and inspiring.
   
   == Constraints ==
-  - description: Include actual HR zone or pace min/km.
+  - description: Include actual HR zone or pace min/km and workout duration in h:mm.
   - why: Explain why this workout fits *today*, using training load and health metrics. Do not list numbers—interpret them.
   - mentalFuel: Provide a motivational, emotionally resonant message.
 
