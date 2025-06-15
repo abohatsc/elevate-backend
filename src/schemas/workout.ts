@@ -13,7 +13,9 @@ export const workoutTypeEnum = z.enum([
   "Interval Ladder",
   "Sprint Intervals",
   "Benchmark",
-  "Strides"
+  "Strides",
+  "Warmup",
+  "Cooldown"
 ]);
 
 export const phaseEnum = z.enum(["warmup", "work", "cooldown"]);
@@ -109,10 +111,10 @@ export const workoutSegmentSchema: z.ZodType<WorkoutSegmentType> = z.lazy(() => 
 
 // Create the workout information schema
 export const workoutInformationSchema = z.object({
-  title: z.string().max(100),
-  description: z.string().max(150),
-  why: z.string().max(250),
-  mentalFuel: z.string().max(200)
+  title: z.string().max(120),
+  description: z.string().max(170),
+  why: z.string().max(270),
+  mentalFuel: z.string().max(220)
 });
 
 // Create the workout plan schema

@@ -41,6 +41,7 @@ ${JSON.stringify(jsonSchema, null, 2)}
 - Each segment must have either targetHeartRate or targetPace
 - Heart rate ranges must be valid numbers between 0-220, with min <= max
 - Pace must be in format "mm:ss" (e.g., "4:30", "10:00") with minutes 0-59 and seconds 0-59
+- For pace ranges, minPerKm must be FASTER than maxPerKm (e.g., minPerKm: "4:30", maxPerKm: "5:00")
 - Zone format must be "Z1" through "Z5"
 - Label is optional and can be auto-generated based on type and phase
 - Phase must be one of: "warmup", "work", "cooldown"
