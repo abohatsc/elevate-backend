@@ -20,12 +20,12 @@
         "why": {
           "type": "string",
           "description": "Explanation of why this workout is beneficial",
-          "maxLength": 200
+          "maxLength": 250
         },
         "mentalFuel": {
           "type": "string",
           "description": "Motivational text for the workout",
-          "maxLength": 120
+          "maxLength": 200
         }
       },
       "required": ["title", "description", "why", "mentalFuel"],
@@ -51,43 +51,158 @@
               "type": {
                 "type": "string",
                 "description": "Type of workout segment",
-                "enum": ["warmup", "workout", "cooldown", "recovery", "interval", "rest"]
-              },
-              "duration": {
-                "type": "number",
-                "description": "Duration of the segment in seconds",
-                "minimum": 0
-              },
-              "distance": {
-                "type": "number",
-                "description": "Distance of the segment in kilometers",
-                "minimum": 0
-              },
-              "pace": {
-                "type": "string",
-                "description": "Target pace for the segment (e.g., '4:30' or 'Z3')",
-                "pattern": "^(\\d{1,2}:\\d{2}|Z[1-5])$"
-              },
-              "heartRate": {
-                "type": "string",
-                "description": "Target heart rate range (e.g., '120-130')",
-                "pattern": "^\\d{2,3}-\\d{2,3}$"
-              },
-              "repeat": {
-                "type": "number",
-                "description": "Number of times this segment should be repeated",
-                "minimum": 1
+                "enum": [
+                  "Easy",
+                  "Recovery",
+                  "Long",
+                  "Steady",
+                  "Tempo",
+                  "Threshold",
+                  "Progression",
+                  "Intervals",
+                  "Interval Ladder",
+                  "Sprint Intervals",
+                  "Benchmark",
+                  "Strides"
+                ]
               },
               "label": {
                 "type": "string",
-                "description": "Custom label for the segment"
+                "description": "Optional custom label for the segment. If omitted, it can be auto-generated based on type and phase."
               },
               "phase": {
                 "type": "string",
-                "description": "Phase of the workout this segment belongs to"
+                "description": "Phase of the workout",
+                "enum": ["warmup", "work", "cooldown"]
+              },
+              "duration": {
+                "type": "object",
+                "description": "Duration of the segment",
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "unit": {
+                    "type": "string",
+                    "enum": ["minutes", "seconds", "kilometers"]
+                  }
+                },
+                "required": ["value", "unit"]
+              },
+              "distance": {
+                "type": "object",
+                "description": "Distance of the segment",
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "unit": {
+                    "type": "string",
+                    "enum": ["kilometers", "meters"]
+                  }
+                },
+                "required": ["value", "unit"]
+              },
+              "targetHeartRate": {
+                "type": "object",
+                "description": "Target heart rate range",
+                "properties": {
+                  "min": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 220
+                  },
+                  "max": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 220
+                  }
+                },
+                "required": ["min", "max"]
+              },
+              "targetPace": {
+                "type": "object",
+                "description": "Target pace for the segment",
+                "properties": {
+                  "zone": {
+                    "type": "string",
+                    "pattern": "^Z[1-5]$"
+                  },
+                  "minPerKm": {
+                    "type": "string",
+                    "pattern": "^([0-5]?\\d):[0-5]\\d$",
+                    "description": "Pace in min:sec format, e.g. '5:30'. Range validation (e.g. max 20:00) should be enforced at runtime."
+                  },
+                  "maxPerKm": {
+                    "type": "string",
+                    "pattern": "^([0-5]?\\d):[0-5]\\d$",
+                    "description": "Pace in min:sec format, e.g. '5:30'. Range validation (e.g. max 20:00) should be enforced at runtime."
+                  }
+                },
+                "required": ["zone", "minPerKm", "maxPerKm"]
+              },
+              "repeat": {
+                "type": "object",
+                "description": "Repeat configuration for interval workouts",
+                "properties": {
+                  "times": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "steps": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/properties/workoutPlan/properties/segments/items"
+                    },
+                    "minItems": 1
+                  }
+                },
+                "required": ["times", "steps"]
+              },
+              "isWarmup": {
+                "type": "boolean",
+                "description": "Flag indicating if this is a warmup segment"
+              },
+              "isCooldown": {
+                "type": "boolean",
+                "description": "Flag indicating if this is a cooldown segment"
+              },
+              "metadata": {
+                "type": "object",
+                "description": "Additional metadata for the segment",
+                "properties": {
+                  "note": {
+                    "type": "string"
+                  },
+                  "effortLevel": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 5
+                  }
+                }
               }
             },
-            "required": ["type"],
+            "required": ["type", "phase"],
+            "oneOf": [
+              {
+                "required": ["duration"],
+                "description": "Either duration or distance must be defined. If both are present, 'duration' takes precedence."
+              },
+              {
+                "required": ["distance"],
+                "description": "Either duration or distance must be defined. If both are present, 'duration' takes precedence."
+              }
+            ],
+            "oneOf": [
+              {
+                "required": ["targetHeartRate"]
+              },
+              {
+                "required": ["targetPace"]
+              }
+            ],
             "additionalProperties": false
           }
         }
