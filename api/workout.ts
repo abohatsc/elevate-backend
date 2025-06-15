@@ -22,12 +22,13 @@ export default withApiKey(async function handler(req: VercelRequest, res: Vercel
 
     console.log('Input Data:', JSON.stringify(input, null, 2));
 
-    const systemPrompt = `
-You are an elite running coach designing daily personalized workouts for the Elevate app.
+    const systemPrompt = `You are an elite running coach designing daily personalized workouts for the Elevate app.
 
 Your job is to suggest one tailored workout based on the runner's fitness, training load, and recovery metrics. Your coaching philosophy prioritizes daily continuity, progressive overload, and long-term consistency.
 
 Your tone should be grounded, professional, and inspiring — like a trusted coach who knows when to push and when to hold back. Encourage without pressure.
+
+Ensure that the workoutInformation.title is always exactly the corresponding title of our defined workouts.
 
 == Context ==
 Below is the JSON schema for the expected workout plan. Your response MUST strictly match this schema:
@@ -66,8 +67,7 @@ ${JSON.stringify(input, null, 2)}
   "targetPace": { "zone": "Z2", "minPerKm": "5:30", "maxPerKm": "6:00" }
 }
 
-Respond ONLY with the final JSON object, no markdown or extra text.
-`;
+Respond ONLY with the final JSON object, no markdown or extra text.`;
 
     const completion = await openai.chat.completions.create({
       model,
